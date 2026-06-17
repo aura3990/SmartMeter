@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}History · Smart PG Electricity Bill Calculator{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+  <div class="mb-4">
+    <div class="section-eyebrow mb-1">Consumption Trends</div>
+    <h2>Reading History &amp; Charts</h2>
+  </div>
+
+  <div class="glass-card p-4 mb-4 chart-card">
+    <ul class="nav nav-pills mb-3" id="chartTabs">
+      <li class="nav-item">
+        <button class="nav-link active" id="tab-daily" data-range="daily" type="button">Daily</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-weekly" data-range="weekly" type="button">Weekly</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="tab-monthly" data-range="monthly" type="button">Monthly</button>
+      </li>
+    </ul>
+    <canvas id="historyChart"></canvas>
+    <div id="historyChartEmpty" class="empty-state d-none">
+      <div class="empty-icon"><i class="bi bi-bar-chart"></i></div>
+      No consumption data yet for this range.
+    </div>
+  </div>
+
+  <div class="glass-card p-4">
+    <h5 class="mb-3"><i class="bi bi-table me-2 text-cyan"></i>All Readings</h5>
+    {% if readings %}
+    <div class="table-responsive">
+      <table class="table table-dark-glass align-middle">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Morning Reading</th>
+            <th>Night Reading</th>
+            <th>Daily Consumption</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in readings %}
+          <tr>
+            <td>{{ r.date.strftime('%d %b %Y') }}</td>
+            <td class="mono-cell">{{ "%.2f"|format(r.morning_reading) if r.morning_reading is not none else '—' }}</td>
+            <td class="mono-cell">{{ "%.2f"|format(r.night_reading) if r.night_reading is not none else '—' }}</td>
+            <td class="mono-cell text-cyan">{{ "%.2f"|format(r.daily_consumption) if r.daily_consumption is not none else '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon"><i class="bi bi-inbox"></i></div>
+      No readings recorded yet. <a href="{{ url_for('add_reading') }}">Add your first reading</a>.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}

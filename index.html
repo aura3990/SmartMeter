@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Smart PG Electricity Bill Calculator{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <div class="hero-eyebrow">// for hostels & paying-guest accommodations</div>
+        <h1 class="hero-title">Know your <span class="grad">electricity bill</span> before it surprises you.</h1>
+        <p class="hero-sub">Log your room's morning and night meter readings, watch consumption trends on live charts, and generate a shareable PDF bill — all from one dashboard built for PG residents and wardens.</p>
+
+        <div class="formula-strip mb-4">
+          <span>Units Used</span><span class="op">=</span><span>Current Reading − Initial Reading</span>
+          <span class="op">|</span>
+          <span>Bill</span><span class="op">=</span><span>Units × &#8377;{{ rate_per_unit }}</span>
+        </div>
+
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{{ url_for('register') }}" class="btn btn-volt">Create Your Account</a>
+          <a href="{{ url_for('login') }}" class="btn btn-ghost-line">I already have an account</a>
+        </div>
+      </div>
+
+      <div class="col-lg-5 mt-5 mt-lg-0">
+        <div class="glass-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="section-eyebrow">Live Meter Preview</span>
+            <span class="meter-pulse"></span>
+          </div>
+          <div class="mb-3">
+            <div class="text-muted-soft small mb-1">Current Reading</div>
+            <div class="meter-display w-100">
+              <span class="digits">04812.6</span>
+              <span class="unit-tag">kWh</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="text-muted-soft small mb-1">Units Consumed</div>
+            <div class="meter-display w-100">
+              <span class="digits amber">0312.4</span>
+              <span class="unit-tag">units</span>
+            </div>
+          </div>
+          <div>
+            <div class="text-muted-soft small mb-1">Bill Amount</div>
+            <div class="meter-display w-100">
+              <span class="digits">&#8377;3124.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-4">
+  <div class="text-center mb-5">
+    <div class="section-eyebrow mb-2">Everything in one room</div>
+    <h2 class="h1">Built for daily readings, not guesswork</h2>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="glass-card p-4 h-100">
+        <div class="feature-chip-icon"><i class="bi bi-pencil-square fs-5"></i></div>
+        <h5>Morning & Night Entry</h5>
+        <p class="text-muted-soft mb-0">Log two readings a day with built-in duplicate protection, so the same slot can never be entered twice.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="glass-card p-4 h-100">
+        <div class="feature-chip-icon"><i class="bi bi-bar-chart-line fs-5"></i></div>
+        <h5>Daily, Weekly & Monthly Charts</h5>
+        <p class="text-muted-soft mb-0">Chart.js powered graphs reveal consumption patterns across every time scale.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="glass-card p-4 h-100">
+        <div class="feature-chip-icon"><i class="bi bi-file-earmark-pdf fs-5"></i></div>
+        <h5>PDF Bill & WhatsApp Share</h5>
+        <p class="text-muted-soft mb-0">Download a clean PDF bill anytime, or share a summary straight to WhatsApp.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="glass-card p-4 h-100">
+        <div class="feature-chip-icon"><i class="bi bi-bell fs-5"></i></div>
+        <h5>Reading Reminders</h5>
+        <p class="text-muted-soft mb-0">Browser notifications nudge residents at 7:00 AM and 10:00 PM to log readings.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="glass-card p-4 h-100">
+        <div class="feature-chip-icon"><i class="bi bi-shield-lock fs-5"></i></div>
+        <h5>Secure Sessions</h5>
+        <p class="text-muted-soft mb-0">Mobile number + password login with hashed credentials and session-based access control.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="glass-card p-4 h-100">
+        <div class="feature-chip-icon"><i class="bi bi-grid-1x2 fs-5"></i></div>
+        <h5>Admin Oversight</h5>
+        <p class="text-muted-soft mb-0">Wardens get a full panel: total revenue, highest/lowest consumers, and every resident's history.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

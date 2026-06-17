@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Login · Smart PG Electricity Bill Calculator{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="container">
+    <div class="glass-card auth-card">
+      <div class="auth-icon"><i class="bi bi-box-arrow-in-right fs-4"></i></div>
+      <h3 class="mb-1">Welcome back</h3>
+      <p class="text-muted-soft mb-4">Log in with your mobile number and password.</p>
+
+      <form method="POST" action="{{ url_for('login') }}" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Mobile Number</label>
+          <input type="tel" name="mobile_number" class="form-control" placeholder="10-digit number" pattern="[0-9]{10}" maxlength="10" required autofocus>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Your password" required>
+        </div>
+        <button type="submit" class="btn btn-volt w-100 mt-2">Log In</button>
+      </form>
+
+      <p class="text-center text-muted-soft mt-4 mb-0">
+        New here? <a href="{{ url_for('register') }}">Create an account</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

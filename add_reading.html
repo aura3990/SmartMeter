@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Add Reading · Smart PG Electricity Bill Calculator{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+  <div class="mb-4">
+    <div class="section-eyebrow mb-1">{{ today.strftime('%A, %d %B %Y') }}</div>
+    <h2>Log Today's Meter Reading</h2>
+    <p class="text-muted-soft">Each slot can be filled only once per day. Last recorded reading: <strong class="text-cyan">{{ "%.2f"|format(user.latest_reading_value()) }} kWh</strong></p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="glass-card p-4 h-100">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="mb-0"><i class="bi bi-sunrise me-2 text-amber"></i>Morning Reading</h5>
+          {% if record and record.morning_reading is not none %}
+            <span class="badge-slot filled">Recorded</span>
+          {% endif %}
+        </div>
+
+        {% if record and record.morning_reading is not none %}
+          <div class="meter-display w-100 mb-2">
+            <span class="digits">{{ "%.2f"|format(record.morning_reading) }}</span>
+            <span class="unit-tag">kWh</span>
+          </div>
+          <p class="text-muted-soft small mb-0">Morning reading for today has already been saved.</p>
+        {% else %}
+          <form method="POST" action="{{ url_for('add_reading') }}">
+            <input type="hidden" name="slot" value="morning">
+            <div class="mb-3">
+              <label class="form-label">Meter Reading (kWh)</label>
+              <input type="number" step="0.01" min="0" name="reading" class="form-control" placeholder="e.g. 4521.30" required>
+            </div>
+            <button type="submit" class="btn btn-amber w-100">Save Morning Reading</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="glass-card p-4 h-100">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="mb-0"><i class="bi bi-moon-stars me-2 text-cyan"></i>Night Reading</h5>
+          {% if record and record.night_reading is not none %}
+            <span class="badge-slot filled">Recorded</span>
+          {% endif %}
+        </div>
+
+        {% if record and record.night_reading is not none %}
+          <div class="meter-display w-100 mb-2">
+            <span class="digits">{{ "%.2f"|format(record.night_reading) }}</span>
+            <span class="unit-tag">kWh</span>
+          </div>
+          <p class="text-muted-soft small mb-0">Night reading for today has already been saved.</p>
+        {% else %}
+          <form method="POST" action="{{ url_for('add_reading') }}">
+            <input type="hidden" name="slot" value="night">
+            <div class="mb-3">
+              <label class="form-label">Meter Reading (kWh)</label>
+              <input type="number" step="0.01" min="0" name="reading" class="form-control" placeholder="e.g. 4528.90" required>
+            </div>
+            <button type="submit" class="btn btn-volt w-100">Save Night Reading</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if record and record.morning_reading is not none and record.night_reading is not none %}
+  <div class="glass-card p-4 mt-4">
+    <h5 class="mb-2"><i class="bi bi-check-circle me-2 text-cyan"></i>Today's Consumption</h5>
+    <div class="meter-display">
+      <span class="digits amber">{{ "%.2f"|format(record.daily_consumption) }}</span>
+      <span class="unit-tag">units today</span>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

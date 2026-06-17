@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Admin Login · Smart PG Electricity Bill Calculator{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="container">
+    <div class="glass-card auth-card">
+      <div class="auth-icon"><i class="bi bi-shield-lock fs-4"></i></div>
+      <h3 class="mb-1">Admin Panel</h3>
+      <p class="text-muted-soft mb-4">Restricted access for PG wardens and administrators.</p>
+
+      <form method="POST" action="{{ url_for('admin_login') }}" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" name="username" class="form-control" placeholder="admin" required autofocus>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Admin password" required>
+        </div>
+        <button type="submit" class="btn btn-amber w-100 mt-2">Login as Admin</button>
+      </form>
+
+      <p class="text-center text-muted-soft mt-4 mb-0">
+        <a href="{{ url_for('index') }}">&larr; Back to home</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

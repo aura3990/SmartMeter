@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Smart PG Electricity Bill Calculator{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+    <div>
+      <div class="section-eyebrow mb-1">Resident Dashboard</div>
+      <h2 class="mb-0">Hi, {{ user.full_name.split(' ')[0] }} <span class="meter-pulse ms-1"></span></h2>
+      <p class="text-muted-soft mb-0">Room {{ user.room_number }} &middot; Joined {{ user.joining_date.strftime('%d %b %Y') }}</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ url_for('add_reading') }}" class="btn btn-volt"><i class="bi bi-plus-circle me-1"></i>Add Reading</a>
+      <a href="{{ url_for('download_bill') }}" class="btn btn-amber"><i class="bi bi-file-earmark-pdf me-1"></i>Download Bill</a>
+      <button id="whatsappShareBtn" class="btn btn-whatsapp"><i class="bi bi-whatsapp me-1"></i>Share</button>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-md-6 col-lg-3">
+      <div class="glass-card stat-card stat-card-enter" style="animation-delay: 0.05s;">
+        <div class="stat-icon"><i class="bi bi-person"></i></div>
+        <div class="stat-label">Resident</div>
+        <div class="stat-value" style="font-size:1.25rem;">{{ user.full_name }}</div>
+        <div class="text-muted-soft small mt-1">Room {{ user.room_number }}</div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="glass-card stat-card stat-card-enter" style="animation-delay: 0.12s;">
+        <div class="stat-icon"><i class="bi bi-speedometer"></i></div>
+        <div class="stat-label">Initial Reading</div>
+        <div class="meter-display mt-1">
+          <span class="digits">{{ "%.2f"|format(user.initial_reading) }}</span>
+          <span class="unit-tag">kWh</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="glass-card stat-card stat-card-enter" style="animation-delay: 0.19s;">
+        <div class="stat-icon"><i class="bi bi-lightning-charge"></i></div>
+        <div class="stat-label">Current Reading</div>
+        <div class="meter-display mt-1">
+          <span class="digits">{{ "%.2f"|format(user.latest_reading_value()) }}</span>
+          <span class="unit-tag">kWh</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="glass-card stat-card accent-amber stat-card-enter" style="animation-delay: 0.26s;">
+        <div class="stat-icon"><i class="bi bi-cash-coin"></i></div>
+        <div class="stat-label">Current Bill</div>
+        <div class="meter-display mt-1">
+          <span class="digits amber">&#8377;{{ "%.2f"|format(user.bill_amount()) }}</span>
+        </div>
+        <div class="text-muted-soft small mt-1">{{ "%.2f"|format(user.total_units_consumed()) }} units used</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="glass-card p-4 h-100">
+        <h5 class="mb-3"><i class="bi bi-calendar-check me-2 text-cyan"></i>Today's Reading Status</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3 p-3 glass-card-flat">
+          <span><i class="bi bi-sunrise me-2 text-amber"></i>Morning</span>
+          {% if today_record and today_record.morning_reading is not none %}
+            <span class="badge-slot filled">{{ "%.2f"|format(today_record.morning_reading) }} kWh</span>
+          {% else %}
+            <span class="badge-slot">Not recorded</span>
+          {% endif %}
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3 p-3 glass-card-flat">
+          <span><i class="bi bi-moon-stars me-2 text-cyan"></i>Night</span>
+          {% if today_record and today_record.night_reading is not none %}
+            <span class="badge-slot filled">{{ "%.2f"|format(today_record.night_reading) }} kWh</span>
+          {% else %}
+            <span class="badge-slot">Not recorded</span>
+          {% endif %}
+        </div>
+        <a href="{{ url_for('add_reading') }}" class="btn btn-ghost-line w-100">Go to Add Reading</a>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="glass-card p-4 h-100 chart-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0"><i class="bi bi-graph-up me-2 text-cyan"></i>Recent Daily Consumption</h5>
+          <a href="{{ url_for('history') }}" class="small">View full history &rarr;</a>
+        </div>
+        <canvas id="dashboardChart"></canvas>
+        <div id="dashboardChartEmpty" class="empty-state d-none">
+          <div class="empty-icon"><i class="bi bi-bar-chart"></i></div>
+          Log a few daily readings to see your consumption trend here.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
